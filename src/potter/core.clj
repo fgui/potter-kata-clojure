@@ -24,18 +24,19 @@
   (sort > (map count (vals (group-by identity books))))
 )
 
+(defn remove-books [book-counts n]
+  (sort >
+        (filter pos?
+                (map #(- %1 %2) book-counts
+                     (concat  (take n (repeat 1)) (repeat 0))))))
+
 (defn price-diff-books-count [aprice diff-books-count]
   (if (empty? diff-books-count)
     aprice
-    (let [diff-books (count diff-books-count)
-          books-process (min 7 diff-books)
-          books-minus-lst (concat (take books-process (repeat 1))
-                                  (take (- diff-books books-process) (repeat 0)))
-          price (books-price
-                 books-process)
-          books-left (sort >
-                           (filter pos?
-                                   (map #(- %1 %2) diff-books-count books-minus-lst)))
+    (let [
+          books-process (min 7 (count diff-books-count))
+          price (books-price  books-process)
+          books-left (remove-books diff-books-count books-process)
           ]
       (recur (+ aprice price) books-left)
       )
