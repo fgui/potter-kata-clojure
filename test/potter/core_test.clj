@@ -5,6 +5,7 @@
 (def same-four-books [1 1 1 1])
 (def four-diff-books [1 2 3 4])
 (def six-diff-books [1 2 3 4 5 6])
+(def mmm-books [1 2 3 4 5 1 2 3])
 
 (deftest same-book-test
   (testing "all books same price"
@@ -24,3 +25,8 @@
   (testing "six different books"
     (is (= (price (range 7))
            (+ (apply-discount (* 3 8) 0.10) (apply-discount (* 4 8 ) 0.20))))))
+
+(deftest mmm-books-test
+  (testing "mmm 8 books 5-3 or 4-4"
+    (is (= (price mmm-books)
+           (* 2 (books-price 4))))))
