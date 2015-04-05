@@ -26,6 +26,13 @@
     (is (= (price (range 7))
            (+ (apply-discount (* 5 8) 0.25) (apply-discount (* 2 8 ) 0.05))))))
 
+(deftest fifty-book-test
+  (testing "test with 50 books"
+    (is (=
+         (price (flatten (take 10 (repeat (range 5)))))
+         (* 10 (books-price 5)))
+        )
+    ))
 (deftest mmm-books-test
   (testing "mmm 8 books 5-3 or 4-4"
     (is (= (price mmm-books)
