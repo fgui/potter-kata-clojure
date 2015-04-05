@@ -6,19 +6,12 @@
   (- price (* price discount))
   )
 
-(def ini-books-price
+(def books-price
   {1 8
    2 (apply-discount (* 2 8) 0.05)
    3 (apply-discount (* 3 8) 0.10)
    4 (apply-discount (* 4 8) 0.20)
    5 (apply-discount (* 5 8) 0.25)})
-
-;; TODO genereta this dinamically base in total number of different books
-(def books-price
-  (merge ini-books-price
-         {6 (+ (ini-books-price 5) (ini-books-price 1))
-          7 (+ (ini-books-price 4) (ini-books-price 3))})
-  )
 
 (defn diff-books-counts [books]
   (sort > (map count (vals (group-by identity books))))
@@ -34,9 +27,21 @@
   (if (empty? diff-books-count)
     aprice
     (let [
-          books-process (min 7 (count diff-books-count))
-          price (books-price  books-process)
-          books-left (remove-books diff-books-count books-process)
+          books-process (min 5 (count diff-books-count))
+          ;;check if we should remove one less books
+          n (if (and (> books-process 1)
+                     (>
+                      (price-diff-books-count
+                       (books-price books-process)
+                       (remove-books diff-books-count books-process))
+                      (price-diff-books-count
+                       (books-price (-  books-process 1))
+                       (remove-books diff-books-count (- books-process 1)))))
+              (-  books-process 1)
+              books-process
+              )
+          price (books-price n)
+          books-left (remove-books diff-books-count n)
           ]
       (recur (+ aprice price) books-left)
       )
