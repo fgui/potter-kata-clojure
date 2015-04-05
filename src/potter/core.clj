@@ -1,15 +1,23 @@
 (ns potter.core)
 
-(def book-price 8M)
-(def discount-diff-books
-  {1 0M
-   2 0.05M
-   3 0.10M
-   4 0.20M
-   5 0.25M})
+(def book-price 8)
 
 (defn apply-discount [price discount]
   (- price (* price discount))
+  )
+
+(def ini-books-price
+  {1 8
+   2 (apply-discount (* 2 8) 0.05)
+   3 (apply-discount (* 3 8) 0.10)
+   4 (apply-discount (* 4 8) 0.20)
+   5 (apply-discount (* 5 8) 0.25)})
+
+;; TODO genereta this dinamically base in total number of different books
+(def books-price
+  (merge ini-books-price
+         {6 (+ (ini-books-price 5) (ini-books-price 1))
+          7 (+ (ini-books-price 4) (ini-books-price 3))})
   )
 
 (defn diff-books-counts [books]
@@ -20,12 +28,11 @@
   (if (empty? diff-books-count)
     aprice
     (let [diff-books (count diff-books-count)
-          books-process (min 5 diff-books)
+          books-process (min 7 diff-books)
           books-minus-lst (concat (take books-process (repeat 1))
                                   (take (- diff-books books-process) (repeat 0)))
-          price (apply-discount
-                 (* book-price books-process)
-                 (discount-diff-books books-process))
+          price (books-price
+                 books-process)
           books-left (sort >
                            (filter pos?
                                    (map #(- %1 %2) diff-books-count books-minus-lst)))
