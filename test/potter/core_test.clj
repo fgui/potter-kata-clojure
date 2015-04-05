@@ -24,7 +24,7 @@
 (deftest seven-diff-book-test
   (testing "six different books"
     (is (= (price (range 7))
-           (+ (apply-discount (* 3 8) 0.10) (apply-discount (* 4 8 ) 0.20))))))
+           (+ (apply-discount (* 5 8) 0.25) (apply-discount (* 2 8 ) 0.05))))))
 
 (deftest mmm-books-test
   (testing "mmm 8 books 5-3 or 4-4"
