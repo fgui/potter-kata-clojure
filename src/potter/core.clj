@@ -28,22 +28,20 @@
     aprice
     (let [
           books-process (min 5 (count diff-books-count))
-          ;;check if we should remove one less books
-          n (if (and (> books-process 1)
-                     (>
-                      (price-diff-books-count
-                       (books-price books-process)
-                       (remove-books diff-books-count books-process))
-                      (price-diff-books-count
-                       (books-price (-  books-process 1))
-                       (remove-books diff-books-count (- books-process 1)))))
-              (-  books-process 1)
-              books-process
-              )
-          price (books-price n)
-          books-left (remove-books diff-books-count n)
           ]
-      (recur (+ aprice price) books-left)
+      (if (> books-process 1)
+        ;; test remove max and max-1
+        (+ aprice (min (price-diff-books-count
+                 (books-price books-process)
+                 (remove-books diff-books-count books-process))
+                (price-diff-books-count
+                 (books-price (-  books-process 1))
+                 (remove-books diff-books-count (- books-process 1)))
+                ))
+        (+ aprice (price-diff-books-count
+                   (books-price books-process)
+                   (remove-books diff-books-count books-process)))
+        )
       )
     )
 )
