@@ -33,7 +33,22 @@
          (* 10 (books-price 5)))
         )
     ))
+
 (deftest mmm-books-test
   (testing "mmm 8 books 5-3 or 4-4"
     (is (= (price mmm-books)
            (* 2 (books-price 4))))))
+
+(deftest test-from-web
+  (testing "web http://gogognome.nl/2013/01/potter-kata-solution/"
+    (is (= (price  [0 0 0 1 1 2 2 2 2 3 3 4]))
+        78.8)
+    )
+  )
+
+(deftest test-from-web2
+  (testing "web http://gogognome.nl/2013/01/potter-kata-solution/"
+    (is (= (price  [0 1 1 2 2 2 3 3 3 3 4 4 4 4 4] ))
+        100)
+    )
+  )
