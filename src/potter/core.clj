@@ -7,11 +7,11 @@
   )
 
 (def books-price
-  {1 8
-   2 (apply-discount (* 2 8) 0.05)
-   3 (apply-discount (* 3 8) 0.10)
-   4 (apply-discount (* 4 8) 0.20)
-   5 (apply-discount (* 5 8) 0.25)})
+  {1 book-price
+   2 (apply-discount (* 2 book-price) 0.05)
+   3 (apply-discount (* 3 book-price) 0.10)
+   4 (apply-discount (* 4 book-price) 0.20)
+   5 (apply-discount (* 5 book-price) 0.25)})
 
 (defn diff-books-counts [books]
   (sort > (vals (frequencies books)))
