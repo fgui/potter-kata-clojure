@@ -52,3 +52,16 @@
         100)
     )
   )
+
+(deftest test-combination
+  (testing ""
+    (is (=
+         (price [:1st :1st :1st :1st :1st
+                 :2nd :2nd :2nd :2nd :2nd
+                 :3rd :3rd :3rd :3rd
+                 :4th :4th :4th :4th :4th
+                 :5th :5th :5th :5th])
+         (+ (* 3 (* 8 5 0.75)) (* 2 (* 8 4 0.8)))
+         ))
+    )
+  )
