@@ -14,7 +14,7 @@
    5 (apply-discount (* 5 8) 0.25)})
 
 (defn diff-books-counts [books]
-  (sort > (map count (vals (group-by identity books))))
+  (sort > (vals (frequencies books)))
 )
 
 (defn remove-books [book-counts n]
@@ -23,24 +23,22 @@
                 (map #(- %1 %2) book-counts
                      (concat  (take n (repeat 1)) (repeat 0))))))
 
-(defn price-diff-books-count [aprice diff-books-count]
+(defn price-diff-books-count [acc-price diff-books-count]
   (if (empty? diff-books-count)
-    aprice
-    (let [
-          books-process (min 5 (count diff-books-count))
-          ]
+    acc-price
+    (let [books-process (min 5 (count diff-books-count))]
       (if (> books-process 1)
-        ;; test remove max and max-1
-        (+ aprice (min (price-diff-books-count
-                 (books-price books-process)
-                 (remove-books diff-books-count books-process))
-                (price-diff-books-count
-                 (books-price (-  books-process 1))
-                 (remove-books diff-books-count (- books-process 1)))
-                ))
-        (+ aprice (price-diff-books-count
-                   (books-price books-process)
-                   (remove-books diff-books-count books-process)))
+        ;; test remove max and max-1 and take min price.
+        (min (price-diff-books-count
+              (+ acc-price (books-price books-process))
+              (remove-books diff-books-count books-process))
+             (price-diff-books-count
+              (+ acc-price (books-price (-  books-process 1)))
+              (remove-books diff-books-count (- books-process 1)))
+             )
+        (recur
+           (+ acc-price (books-price books-process))
+           (remove-books diff-books-count books-process))
         )
       )
     )
