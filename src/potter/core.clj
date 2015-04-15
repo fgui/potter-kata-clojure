@@ -21,7 +21,7 @@
   (sort >
         (filter pos?
                 (map #(- %1 %2) book-counts
-                     (concat  (take n (repeat 1)) (repeat 0))))))
+                     (concat (repeat n 1) (repeat 0))))))
 
 (defn price-diff-books-count [acc-price diff-books-count]
   (if (empty? diff-books-count)
