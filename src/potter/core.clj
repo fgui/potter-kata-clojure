@@ -29,20 +29,15 @@
     (let [books-process (min 5 (count diff-books-count))]
       (if (> books-process 1)
         ;; test remove max and max-1 and take min price.
-        (min (price-diff-books-count
-              (+ acc-price (books-price books-process))
-              (remove-books diff-books-count books-process))
-             (price-diff-books-count
-              (+ acc-price (books-price (-  books-process 1)))
-              (remove-books diff-books-count (- books-process 1)))
-             )
+        (apply min (map
+                    #(price-diff-books-count
+                     (+ acc-price (books-price (-  books-process %)))
+                     (remove-books diff-books-count (- books-process %)))
+                    (range 0 2)))
+        ;; change the 2 in range by books-process to do all combinations.
         (recur
            (+ acc-price (books-price books-process))
-           (remove-books diff-books-count books-process))
-        )
-      )
-    )
-)
+           (remove-books diff-books-count books-process))))))
 
 (defn price [books]
   (price-diff-books-count 0 (diff-books-counts books))
